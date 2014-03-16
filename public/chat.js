@@ -2,7 +2,7 @@ window.onload = function() {
 
     var messages = [];
     // var socket = io.connect('http://192.168.0.2:3700');
-    var socket = io.connect('http://http://boiling-plateau-2254.herokuapp.com/');
+    var socket = io.connect('http://http://boiling-plateau-2254.herokuapp.com:Number(process.env.PORT)');
     // var name = document.getElementById("name");
 
     socket.on('connect', function (data) {
