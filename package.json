@@ -14,5 +14,9 @@
   "devDependencies": {
     "gulp": "^3.5.5",
     "browser-sync": "^0.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mcky/SecondScreen.git"
   }
 }

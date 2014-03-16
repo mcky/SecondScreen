@@ -1,6 +1,6 @@
 var express = require("express");
 var app = express();
-var port = process.env.port || 3700;
+var port = Number(process.env.PORT || 3700);
 var hbs = require('hbs');
 
 app.use(express.static(__dirname + '/public'));
