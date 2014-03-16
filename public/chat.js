@@ -2,8 +2,7 @@ window.onload = function() {
 
     var messages = [];
     // var socket = io.connect('http://192.168.0.2:3700');
-    var port = Number(process.env.PORT || 3700);
-    var socket = io.connect('http://107.170.106.209:'+ port);
+    var socket = io.connect('http://107.170.106.209:49154');
     // var name = document.getElementById("name");
 
     socket.on('connect', function (data) {
@@ -102,6 +101,4 @@ window.onload = function() {
             console.log("There is a problem:", data);
         }
     });
-
-    console.log(port);
 }
