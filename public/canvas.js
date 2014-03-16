@@ -1,7 +1,6 @@
 window.onload = function() {
 
-    var messages = [];
-    var socket = io.connect('http://192.168.0.2:3700');
+    var socket = io.connect(window.location.origin);
 
     var canvas = document.getElementById('myCanvas');
         canvas.width = window.innerWidth;

@@ -1,9 +1,7 @@
 window.onload = function() {
 
     var messages = [];
-    // var socket = io.connect('http://192.168.0.2:3700');
-    var socket = io.connect('http://107.170.106.209:49154');
-    // var name = document.getElementById("name");
+    var socket = io.connect(window.location.origin);
 
     socket.on('connect', function (data) {
         console.log('we are connected');
