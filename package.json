@@ -2,7 +2,7 @@
   "name": "SecondScreen",
   "version": "0.0.0",
   "description": "Gesture based second screen input",
-  "engine": {
+  "engines": {
     "node": "0.10.26"
   },
   "dependencies": {
