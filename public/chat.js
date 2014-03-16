@@ -1,7 +1,8 @@
 window.onload = function() {
 
     var messages = [];
-    var socket = io.connect('http://192.168.0.2:3700');
+    // var socket = io.connect('http://192.168.0.2:3700');
+    var socket = io.connect('http://http://boiling-plateau-2254.herokuapp.com/');
     // var name = document.getElementById("name");
 
     socket.on('connect', function (data) {
@@ -100,4 +101,6 @@ window.onload = function() {
             console.log("There is a problem:", data);
         }
     });
+
+    console.log(port);
 }
