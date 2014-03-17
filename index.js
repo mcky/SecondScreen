@@ -1,6 +1,6 @@
-app.configure('production', function(){
-    require('./newrelic.js');
-});
+// app.configure('production', function(){
+//     require('./newrelic.js');
+// });
 
 var express = require("express");
 var app = express();
