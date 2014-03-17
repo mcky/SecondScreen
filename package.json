@@ -8,7 +8,9 @@
   "dependencies": {
     "socket.io": "latest",
     "express": "latest",
-    "hbs": "^2.5.0"
+    "hbs": "^2.5.0",
+    "ejs": "^0.8.5",
+    "ejs-locals": "^1.0.2"
   },
   "author": "developer",
   "devDependencies": {

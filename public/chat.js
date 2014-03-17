@@ -45,20 +45,23 @@ window.onload = function() {
 //
 //
 //
-    var otherButton = document.getElementById("other");
-
-    otherButton.onclick = function() {
-            socket.emit('doFunction', { functionName: 'xxx', argx: 'myargs' });
-    };
+    document.querySelector('#dropdown').onchange = function(){
+        var func = this.value;
+        socket.emit('doFunction', { functionName: func, argx: 'myargs' });
+    }
 
     socket.on('functionName', function (data) {
         if(data.functionName) {
             console.log(data)
-            // if (data.functionName == 'xxx') {
-            //     myFunction(data.argx);
-            // } else {
-            //     console.log('not xxx')
-            // };
+            if (data.functionName == 'xxx') {
+                myFunction(data.argx);
+            } else if (data.functionName == 'playVideo') {
+                player.playVideo();
+            } else if (data.functionName == 'pauseVideo') {
+                player.pauseVideo();
+            } else if (data.functionName == 'playVideo') {
+                player.playVideo();
+            };
         } else {
             console.log("There is a problem:", data);
         }
@@ -71,7 +74,6 @@ window.onload = function() {
 //
 //
 //
-
     socket.on('keyboardInput', function (data) {
         if(data.keyboardInput) {
             var output = document.getElementById("recievedInput");
@@ -86,6 +88,23 @@ window.onload = function() {
 //
 //
 
+        var otherButton = document.getElementById("other");
+        otherButton.onclick = function() {
+            socket.emit('Youtube', { youtubedata: 'kkskf', url: '3KEpb4UaAr8' });
+        };
+
+        socket.on('youtubedata', function (data) {
+        if(data.youtubedata) {
+            console.log(data)
+            // player.loadVideoByUrl(data.url, 5, "large");
+            player.loadVideoById(data.url, 5, "large")
+        } else {
+            console.log("There is a problem:", data);
+        }
+    });
+//
+//
+//
     document.querySelector('#slider').onchange = function(){
         var num = this.value;
         socket.emit('pop', { volslider: num});
@@ -93,10 +112,12 @@ window.onload = function() {
 
     socket.on('volslider', function (data) {
         if(data.volslider) {
+            player.setVolume(data.volslider);
             document.querySelector('#slideroutput').value = data.volslider;
             document.querySelector('#slider').value = data.volslider;
         } else {
             console.log("There is a problem:", data);
         }
     });
+
 }

@@ -1,33 +1,35 @@
-require('./newrelic.js');
+app.configure('production', function(){
+    require('./newrelic.js');
+});
+
 var express = require("express");
 var app = express();
 var port = Number(process.env.PORT || 3700);
 var hbs = require('hbs');
+var io = require('socket.io').listen(app.listen(port));
 
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'html');
 app.engine('html', hbs.__express);
+
+
 app.get('/', function(req, res) {
-    res.render('index', {title: "Home", scripts: [{script: "chat"}]});
-});
-
-app.get('/mobile', function(req, res) {
-    res.render('Mobile', {title: "Mobile", scripts: [{script: "mobile"}]});
-});
-
-app.get('/gestures', function(req, res) {
-        res.render('gestures', {title: "Gestures", scripts: [{script: "gestures"}]});
+    res.render('index', {title: "home", scripts: [{script : 'chat'}, {script : 'youtube'}]});
 });
 
 app.get('/canvas', function(req, res) {
-        res.render('canvas', {title: "Canvas", scripts: [{script: "canvas"}]});
+        res.render('canvas', {title: "Canvas", scripts: [{script : 'hammer'}, {script: 'canvas'}]});
 });
 
 app.get('/keyboard', function(req, res) {
-        res.render('keyboard', {title: "Keyboard", scripts: [{script: "keyboard"}]});
+        res.render('keyboard', {title: "Keyboard", scripts: [{script: 'keyboard'}]});
 });
 
-var io = require('socket.io').listen(app.listen(port));
+app.get('/yt', function(req, res) {
+        res.render('yt', {title: "YT", scripts: [{script : 'hammer'}, {script: 'yt-flick'}]});
+});
+
+
 
 io.sockets.on('connection', function (socket) {
 
@@ -53,7 +55,13 @@ io.sockets.on('connection', function (socket) {
     socket.on('doFunction', function (data) {
         io.sockets.emit('functionName', data);
     });
+
+    socket.on('Youtube', function (data) {
+        io.sockets.emit('youtubedata', data);
+    });
 });
 
 
 console.log("Listening on port " + port);
+
+

@@ -1,5 +1,7 @@
 window.onload = function() {
 
+    // window resize or rotate redraw canvas width/height
+
     var socket = io.connect(window.location.origin);
 
     var canvas = document.getElementById('myCanvas');
@@ -18,7 +20,7 @@ window.onload = function() {
             var lineWidth = canvas.height / 25;
             var outerRadius = canvas.height / 10;
             var innerRadius = outerRadius - (lineWidth);
-            drawCircle(x,y,innerRadius);
+            // drawCircle(x,y,innerRadius);
     });
 
     var hammertime = Hammer(document).on("drag", function(event) {
