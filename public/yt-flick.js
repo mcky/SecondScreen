@@ -2,11 +2,6 @@ window.onload = function() {
 
     var socket = io.connect(window.location.origin);
 
-    var debug = document.querySelector('#debug');
-    var debug2 = document.querySelector('#debug2');
-    var debug3 = document.querySelector('#debug3');
-    var debug4 = document.querySelector('#debug4');
-
     var hammertime = Hammer(document).on("swipeup", function(event) {
             hammertime.options.prevent_default = true;
             var text = event.gesture.target;
@@ -22,5 +17,32 @@ window.onload = function() {
             // var outerRadius = canvas.height / 10;
             // var innerRadius = outerRadius - (lineWidth);
     });
+
+
+    var searchBox = document.getElementById("search")
+
+    searchBox.oninput = function(){
+        var text = this.value;
+        // socket.emit('Youtube', { searchQuery: text});
+        socket.emit('youtubeSearch', { searchQuery: text});
+    }
+
+    socket.on('searchQuery', function (data) {
+            if(data.searchQuery) {
+                console.log(data.searchQuery)
+            } else {
+                console.log("There is a problem:", data);
+            }
+    });
+
+    // socket.on('youtubedata', function (data) {
+    //         if(data.youtubedata) {
+    //             console.log(data)
+    //             // player.loadVideoByUrl(data.url, 5, "large");
+    //             // player.loadVideoById(data.url, 5, "large")
+    //         } else {
+    //             console.log("There is a problem:", data);
+    //         }
+    //     });
 
 };

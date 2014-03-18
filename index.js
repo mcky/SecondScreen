@@ -59,9 +59,44 @@ io.sockets.on('connection', function (socket) {
     socket.on('Youtube', function (data) {
         io.sockets.emit('youtubedata', data);
     });
+
+    socket.on('youtubeSearch', function (data) {
+        // ytSearch(data.searchQuery)
+        // io.sockets.emit('searchQuery', data);
+        console.log;
+    });
 });
 
 
 console.log("Listening on port " + port);
+
+var youtubeAPIkey = 'AIzaSyBxaLdWuMLvP9BktxAS6WVUuS7yo7OTH38';
+// var youtubeAPIkey = 'AIzaSyA3CD6-nv0w-sKWS1wUEQojQMV9O4XqIgc'; //browser
+
+var Youtube = require("youtube-api");
+
+Youtube.authenticate({
+    type: 'key',
+    key: youtubeAPIkey
+});
+
+app.get('/yt2', function(req, res) {
+
+    Youtube.search.list({
+        "part": "string",
+        // "mySubscribers": true,
+        // "maxResults": 50
+    }, function (err, data) {
+        console.log(err, data);
+        var ytres = err + ',' + data;
+        res.render('yt2', {title: "YT", ytresult: ytres});
+    });
+});
+
+
+
+
+url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=wheelockcollege&type=channel&key=AIzaSyBxaLdWuMLvP9BktxAS6WVUuS7yo7OTH38";
+
 
 

@@ -10,12 +10,14 @@
     "express": "latest",
     "hbs": "^2.5.0",
     "ejs": "^0.8.5",
-    "ejs-locals": "^1.0.2"
+    "ejs-locals": "^1.0.2",
+    "youtube-api": "^0.2.2"
   },
   "author": "developer",
   "devDependencies": {
     "gulp": "^3.5.5",
-    "browser-sync": "^0.7.0"
+    "browser-sync": "^0.7.0",
+    "gulp-sass": "^0.7.1"
   },
   "repository": {
     "type": "git",

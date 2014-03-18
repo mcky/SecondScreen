@@ -94,14 +94,14 @@ window.onload = function() {
         };
 
         socket.on('youtubedata', function (data) {
-        if(data.youtubedata) {
-            console.log(data)
-            // player.loadVideoByUrl(data.url, 5, "large");
-            player.loadVideoById(data.url, 5, "large")
-        } else {
-            console.log("There is a problem:", data);
-        }
-    });
+            if(data.youtubedata) {
+                console.log(data)
+                // player.loadVideoByUrl(data.url, 5, "large");
+                player.loadVideoById(data.url, 5, "large")
+            } else {
+                console.log("There is a problem:", data);
+            }
+        });
 //
 //
 //
