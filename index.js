@@ -6,19 +6,21 @@ var express = require("express");
 var app = express();
 var port = Number(process.env.PORT || 3700);
 var hbs = require('hbs');
-var io = require('socket.io').listen(app.listen(port));
 
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'html');
 app.engine('html', hbs.__express);
 
+var io = require('socket.io').listen(app.listen(port));
+io.enable('browser client minification');  // send minified client
+io.enable('browser client gzip');          // gzip the file
 
 app.get('/', function(req, res) {
-    res.render('index', {title: "home", scripts: [{script : 'chat'}, {script : 'youtube'}]});
+    res.render('index', {title: "home", scripts: [{script : 'player'}, {script : 'youtube'}]});
 });
 
 app.get('/canvas', function(req, res) {
-        res.render('canvas', {title: "Canvas", scripts: [{script : 'hammer'}, {script: 'canvas'}]});
+        res.render('canvas', {title: "Canvas", scripts: [{script : 'hammer.min'}, {script: 'canvas'}]});
 });
 
 app.get('/keyboard', function(req, res) {
@@ -26,10 +28,8 @@ app.get('/keyboard', function(req, res) {
 });
 
 app.get('/yt', function(req, res) {
-        res.render('yt', {title: "YT", scripts: [{script : 'hammer'}, {script: 'yt-flick'}]});
+        res.render('yt', {title: "YT", scripts: [{script : 'hammer.min'}, {script: 'yt'}]});
 });
-
-
 
 io.sockets.on('connection', function (socket) {
 
@@ -61,42 +61,34 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('youtubeSearch', function (data) {
-        // ytSearch(data.searchQuery)
-        // io.sockets.emit('searchQuery', data);
-        console.log;
+        io.sockets.emit('searchQuery', data);
+        var searchQuery = data.searchQuery;
+        ytSearch(searchQuery);
     });
 });
 
 
 console.log("Listening on port " + port);
 
-var youtubeAPIkey = 'AIzaSyBxaLdWuMLvP9BktxAS6WVUuS7yo7OTH38';
-// var youtubeAPIkey = 'AIzaSyA3CD6-nv0w-sKWS1wUEQojQMV9O4XqIgc'; //browser
 
 var Youtube = require("youtube-api");
 
 Youtube.authenticate({
     type: 'key',
-    key: youtubeAPIkey
+    key: 'AIzaSyBxaLdWuMLvP9BktxAS6WVUuS7yo7OTH38'
 });
 
-app.get('/yt2', function(req, res) {
-
+function ytSearch(searchQuery) {
     Youtube.search.list({
-        "part": "string",
+        q: searchQuery,
+        "part": "snippet",
+        "maxResults": 5
         // "mySubscribers": true,
         // "maxResults": 50
     }, function (err, data) {
         console.log(err, data);
-        var ytres = err + ',' + data;
-        res.render('yt2', {title: "YT", ytresult: ytres});
+            io.sockets.emit('searchResult', data);
     });
-});
-
-
-
-
-url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=wheelockcollege&type=channel&key=AIzaSyBxaLdWuMLvP9BktxAS6WVUuS7yo7OTH38";
-
+};
 
 

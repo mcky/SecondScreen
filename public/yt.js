@@ -3,87 +3,20 @@ window.onload = function() {
     // window resize or rotate redraw canvas width/height
 
     var socket = io.connect(window.location.origin);
-
     document.ontouchmove = function(e){ e.preventDefault(); }
 
-
-    var searchBox = document.getElementById("searchbox");
-    searchBox.oninput = function(){
-        var text = this.value;
-        // scope to only return to device that sent
-        socket.emit('youtubeSearch', { searchQuery: text});
-    };
-
-    var searchResults = document.getElementById("searchresults");
-    socket.on('searchResult', function (data) {
-            console.log('searchResult: '+ data);
-
-            var searchItems = data.items;
-            var html = '';
-            for (var i=0,  tot=searchItems.length; i < tot; i++) {
-                console.log(searchItems[i].snippet.title);
-                html += '<li class="result" data-videotitle="' + searchItems[i].snippet.title +'" data-videoID="' + searchItems[i].id.videoId + '">' + searchItems[i].snippet.title + '</li>';
-            };
-            searchResults.innerHTML = html;
-            // searchItem = document.querySelectorAll(".result");
-            getTextContent();
-    });
-
-    function getTextContent() {
-        var searchItem = document.querySelectorAll(".result");
-        var playlist = document.getElementById("playlist");
-        for (var i=0,  tot=searchItem.length; i < tot; i++) {
-            searchItem[i].onclick = function() {
-                // playlist.appendChild(this);
-                playlist.insertBefore(this, playlist.firstChild);
-                this.classList.add('playlistitem');
-                this.classList.remove('result');
-                addPreview();
-            };
-        };
-    };
-
-    // addPreview();
-    function addPreview(){
-        var playlistItem = document.querySelectorAll(".playlistitem");
-        for (var i=0,  tot=playlistItem.length; i < tot; i++) {
-            playlistItem[i].onclick = function() {
-                this.classList.add('previewing');
-                var videoId = this.dataset.videoid;
-                var videoTitle = this.dataset.videotitle;
-                var preview = document.getElementById('preview');
-                preview.classList.remove('hidden');
-                showPreview(videoTitle, videoId);
-                socket.emit('Youtube', { youtubedata: 'data', url: videoId});
-            };
-        };
-    };
-
-    function showPreview(videoTitle, videoId) {
-        var preview = document.getElementById('preview');
-
-        preview.innerHTML = '<h2>' + videoTitle + '</h2>';
-
-        var hammertime = Hammer(document).on("swipeup", function(event) {
-        // var hammertime = Hammer(preview).on("swipeup", function(event) {
-            hammertime.options.prevent_default = true;
-            socket.emit('Youtube', { youtubedata: 'data', url: videoId});
-        });
-    }
-
-
-
-
-
-
-
-
-
-
 //  simulate clicks?
+
+
+
     var canvas = document.getElementById('myCanvas');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
+    var debug = document.querySelector('#debug');
+    var debug2 = document.querySelector('#debug2');
+    var debug3 = document.querySelector('#debug3');
+    var debug4 = document.querySelector('#debug4');
 
     socket.on('currentVolume', function (data) {
         // currentVolume = data.currentVolume
@@ -93,34 +26,35 @@ window.onload = function() {
         currentVolume = 50;
     };
 
-    var hammertime = Hammer(document).on("pinch", function(event) {
-        canvas.classList.remove('hidden');
-    });
-
-    // var hammertime = Hammer(document).on("swipeleft", function(event) {
-    //     document.getElementById('playlistbox').scrollIntoView(true);
-    // });
-
-    // var hammertime = Hammer(document).on("swiperight", function(event) {
-    //     document.getElementById('search').scrollIntoView(true);
-    // });
-
-
-
-    // var hammertime = Hammer(document).on("drag", function(event) {
-    //         // hammertime.options.prevent_default = true;
+    // var hammertime = Hammer(document).on("tap", function(event) {
+    //         hammertime.options.prevent_default = true;
     //         var x = event.gesture.center.pageX;
     //         var y = event.gesture.center.pageY;
-    //         var lineWidth = canvas.height / 50;
+    //         var lineWidth = canvas.height / 25;
     //         var outerRadius = canvas.height / 10;
     //         var innerRadius = outerRadius - (lineWidth);
-    //         console.log('drag');
-    //         drawSmall(x,y,innerRadius,outerRadius,lineWidth);
+    //         // drawCircle(x,y,innerRadius);
     // });
+
+
+    var hammertime = Hammer(document).on("drag", function(event) {
+            // hammertime.options.prevent_default = true;
+            var x = event.gesture.center.pageX;
+            var y = event.gesture.center.pageY;
+            var lineWidth = canvas.height / 50;
+            var outerRadius = canvas.height / 10;
+            var innerRadius = outerRadius - (lineWidth);
+            drawSmall(x,y,innerRadius,outerRadius,lineWidth);
+    });
 
     var hammertime = Hammer(document).on("release", function(event) {
         clearCanvas();
-        canvas.classList.add('hidden');
+        debug.innerHTML = '';
+        debug2.innerHTML = '';
+        debug3.innerHTML = '';
+        debug4.innerHTML = '';
+        debug5.innerHTML = '';
+        debug6.innerHTML = '';
     });
 
 
@@ -151,14 +85,12 @@ window.onload = function() {
             }
             drawLarge(x,y,innerRadius,outerRadius);
 
-                        // if (event.gesture.scale >= 1) {
-                            // var newVol = currentVolume + ((100 - currentVolume) / ((canvas.height / 2.5) / (outerRadius - startDiff)));
-                            var currentVolume = 27
-                            var newVol = (((100 - currentVolume) / (canvas.height / 2.5))) * (outerRadius - startDiff);
-                        // } else {
-                            // var newVol = currentVolume * ((outerRadius - (innerRadius + 10)) / (startDiff - innerRadius ));
-                            // var newVol = ((currentVolume / (outerRadius - (innerRadius + 10)))) * (outerRadius - startDiff);
-                        // };
+                        if (event.gesture.scale >= 1) {
+                            var newVol = currentVolume + ((100 - currentVolume) / ((canvas.height / 2.5) / (outerRadius - startDiff)));
+                        } else {
+                            // jumps when scale switches
+                            var newVol = currentVolume * ((outerRadius - (innerRadius + 10)) / (startDiff - innerRadius ));
+                        };
 
                         if (newVol > 100) {
                             var newVol = 100;
@@ -179,7 +111,6 @@ window.onload = function() {
 
     });
 
-    window.addEventListener('resize', clearCanvas, false);
 
     var requestAnimationFrame = window.requestAnimationFrame        ||
                                 window.mozRequestAnimationFrame     ||
@@ -189,11 +120,67 @@ window.onload = function() {
     function clearCanvas() {
         var context = canvas.getContext('2d');
         context.clearRect(0,0,canvas.width,canvas.height);
+        renderGrid(50, "red");
     };
+
+
+// var angle = 1;
+// function drawCircle(centerX, centerY, innerRadius) {
+//     var context = canvas.getContext('2d');
+//     context.clearRect(0,0,canvas.width,canvas.height);
+
+//     context.beginPath();
+//         // context.arc(225, 225, 175, 0, Math.PI * 2, false);
+//         context.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI, false);
+//     context.closePath();
+
+//     // color in the circle
+//     context.lineWidth = 1;
+//     context.strokeStyle = 'rgba(255,255,255,'+ angle +')';
+//     context.stroke();
+//     angle += -0.02;
+
+//     if (angle > 0){ requestAnimationFrame(drawCircle); } else { angle = 1; };
+//     // requestAnimationFrame(drawCircle);
+// }
+
+// drawCircle();
+//     function drawCircle(centerX, centerY, innerRadius) {
+//         var context = canvas.getContext('2d');
+//         context.clearRect(0,0,canvas.width,canvas.height);
+//         fade = true,
+//         fadeVal = 1;
+//         context.globalAlpha = 1;
+
+//         function loop() {
+//         if (fade === true) {
+//             context.globalAlpha = 1 + (1-fadeVal);
+//             context.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI, false);
+//             context.lineWidth = 1;
+//             context.strokeStyle = 'rgba(0,0,0,' + (1 - fadeVal) + ')';
+//             context.stroke();
+
+//             fadeVal -= 0.02;
+//         }
+//         if (fadeVal >= 0) requestAnimationFrame(loop);
+//         }
+
+//         loop();
+
+//         // inner
+//         context.beginPath();
+//             context.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI, false);
+//             context.lineWidth = 1;
+//             context.strokeStyle = 'rgba(255,255,255,1)';
+//             context.stroke();
+//         context.closePath();
+//     };
+
 
     function drawSmall(centerX, centerY, innerRadius, outerRadius, lineWidth) {
         var context = canvas.getContext('2d');
         context.clearRect(0,0,canvas.width,canvas.height);
+        renderGrid(50, "red");
 
         // center
         context.beginPath();
@@ -248,4 +235,37 @@ window.onload = function() {
         context.closePath();
 
     };
+
+
+    function renderGrid(gridPixelSize, color)    {
+    var context = canvas.getContext('2d');
+
+        context.save();
+        context.lineWidth = 0.1;
+        context.strokeStyle = color;
+
+        // horizontal grid lines
+        for(var i = 0; i <= canvas.height; i = i + gridPixelSize)
+        {
+            context.beginPath();
+            context.moveTo(0, i);
+            context.lineTo(canvas.width, i);
+            context.closePath();
+            context.stroke();
+        }
+
+        // vertical grid lines
+        for(var j = 0; j <= canvas.width; j = j + gridPixelSize)
+        {
+            context.beginPath();
+            context.moveTo(j, 0);
+            context.lineTo(j, canvas.height);
+            context.closePath();
+            context.stroke();
+        }
+
+        context.restore();
+    }
+
+    renderGrid(50, "red");
 };

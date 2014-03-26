@@ -1,2 +1,85 @@
+.hidden {
+  display: none; }
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0; }
+
+body, html {
+  width: 100%;
+  height: 100%;
+  font-size: 28px; }
+  @media (min-width: 768px) {
+    body, html {
+      font-size: 24px; } }
+  @media (min-width: 992px) {
+    body, html {
+      font-size: 16px; } }
+
 body {
-  background: white !important; }
+  font-family: Helvetica;
+  background: #f5f5f5;
+  color: #333; }
+
+.YT #search, .YT #playlistbox, .YT #preview {
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  position: absolute;
+  top: 0; }
+  @media (min-width: 768px) {
+    .YT #search, .YT #playlistbox, .YT #preview {
+      width: 50%; } }
+  @media (min-width: 992px) {
+    .YT #search, .YT #playlistbox, .YT #preview {
+      width: 33.33333%; } }
+.YT #search {
+  left: 0; }
+.YT #playlistbox {
+  left: 100%; }
+  @media (min-width: 768px) {
+    .YT #playlistbox {
+      left: 50%; } }
+  @media (min-width: 992px) {
+    .YT #playlistbox {
+      left: 33.33333%; } }
+.YT #preview {
+  left: 200%; }
+  @media (min-width: 768px) {
+    .YT #preview {
+      left: 100%; } }
+  @media (min-width: 992px) {
+    .YT #preview {
+      left: 66.66667%; } }
+.YT #searchbox {
+  width: 100%;
+  border: none;
+  margin: 0 0 10px 0;
+  padding: 5px 10px;
+  font-size: 28px; }
+  @media (min-width: 768px) {
+    .YT #searchbox {
+      font-size: 24px; } }
+  @media (min-width: 992px) {
+    .YT #searchbox {
+      font-size: 16px; } }
+.YT ul {
+  list-style: none; }
+  .YT ul .result, .YT ul .playlistitem {
+    margin: 0 0 10px 0;
+    padding: 15px;
+    background: #fff;
+    box-shadow: 0 3px 1px 0 #e6e6e6; }
+  .YT ul .playlistitem:first-of-type:before {
+    content: '> '; }
+.YT .ytlink {
+  width: 32%;
+  border: 1px solid black;
+  height: 200px;
+  display: inline-block; }
+
+#myCanvas {
+  position: fixed;
+  z-index: 100000;
+  background: rgba(0, 0, 0, 0.5); }

@@ -97,7 +97,7 @@ window.onload = function() {
             if(data.youtubedata) {
                 console.log(data)
                 // player.loadVideoByUrl(data.url, 5, "large");
-                player.loadVideoById(data.url, 5, "large")
+                player.loadVideoById(data.url, "large")
             } else {
                 console.log("There is a problem:", data);
             }
@@ -111,13 +111,11 @@ window.onload = function() {
     }
 
     socket.on('volslider', function (data) {
-        if(data.volslider) {
             player.setVolume(data.volslider);
             document.querySelector('#slideroutput').value = data.volslider;
             document.querySelector('#slider').value = data.volslider;
-        } else {
-            console.log("There is a problem:", data);
-        }
     });
 
+
+// end
 }
